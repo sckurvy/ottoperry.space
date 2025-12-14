@@ -224,6 +224,36 @@ body.dark-mode .pages-title {
     display: block;
 }
 
+/* Discord Chat */
+#chatMessages {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+.chat-message {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background: #f1f1f1;
+    color: #000;
+}
+
+body.dark-mode .chat-message {
+    background: #1f2933;
+    color: #fff;
+}
+
+.chat-message-author {
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.chat-message-time {
+    font-size: 10px;
+    opacity: 0.7;
+}
 
 
 
