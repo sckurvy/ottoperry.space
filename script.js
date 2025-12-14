@@ -1,16 +1,16 @@
+// =====================
 // Dark mode functionality
+// =====================
 const toggleBtn = document.querySelector('.toggle-btn');
 const modeLabel = document.querySelector('.mode-label');
 const body = document.body;
 
-// Load saved preference
 const savedMode = localStorage.getItem('darkMode');
 if (savedMode === 'true') {
     body.classList.add('dark-mode');
     modeLabel.textContent = 'Dark';
 }
 
-// Toggle dark mode
 toggleBtn.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     const isDark = body.classList.contains('dark-mode');
@@ -18,7 +18,10 @@ toggleBtn.addEventListener('click', () => {
     localStorage.setItem('darkMode', isDark);
 });
 
+
+// =====================
 // Particle system
+// =====================
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -32,172 +35,165 @@ function resizeCanvas() {
 
 function initParticles() {
     particles = [];
-    const particleCount = Math.floor((canvas.width * canvas.height) / 8000);
-    
-    for (let i = 0; i < particleCount; i++) {
+    const count = Math.floor((canvas.width * canvas.height) / 8000);
+
+    for (let i = 0; i < count; i++) {
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 0.3,
             vy: (Math.random() - 0.5) * 0.3,
-            radius: 2
+            r: 2
         });
     }
 }
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    const isDark = body.classList.contains('dark-mode');
-    ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-    
-    particles.forEach(particle => {
-        const dx = mouse.x - particle.x;
-        const dy = mouse.y - particle.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const repelRadius = 100;
+    ctx.fillStyle = body.classList.contains('dark-mode') ? '#fff' : '#000';
 
-        if (distance < repelRadius) {
-            const force = (repelRadius - distance) / repelRadius;
-            particle.x -= (dx / distance) * force * 3;
-            particle.y -= (dy / distance) * force * 3;
+    particles.forEach(p => {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+
+        if (d < 100) {
+            p.x -= dx / d * 3;
+            p.y -= dy / d * 3;
         }
 
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        p.x += p.vx;
+        p.y += p.vy;
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
-        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
     });
 
     requestAnimationFrame(animate);
 }
 
-// Mouse tracking
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
 });
 
-// Initialize
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 animate();
 
-// Page Navigation
-const pageButtons = document.querySelectorAll('.page-btn');
-const backBtn = document.querySelector('.back-btn');
+
+// =====================
+// Page routing
+// =====================
 const mainPage = document.getElementById('mainPage');
 const discordPage = document.getElementById('discordPage');
+const backBtn = document.querySelector('.back-btn');
+const pageButtons = document.querySelectorAll('[data-page="discordbot"]');
+
+function showHome() {
+    mainPage.classList.add('active');
+    discordPage.classList.remove('active');
+}
+
+function showDiscord() {
+    mainPage.classList.remove('active');
+    discordPage.classList.add('active');
+    initDiscordBot();
+}
 
 pageButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        const page = btn.getAttribute('data-page');
-        if (page === 'discordbot') {
-            mainPage.classList.remove('active');
-            discordPage.classList.add('active');
-            window.history.pushState({page: 'discordbot'}, '', '/discordbot');
-        }
+        showDiscord();
+        history.pushState({ page: 'discordbot' }, '', '/discordbot');
     });
 });
 
 backBtn.addEventListener('click', () => {
-    discordPage.classList.remove('active');
-    mainPage.classList.add('active');
-    window.history.pushState({page: 'home'}, '', '/');
+    showHome();
+    history.pushState({ page: 'home' }, '', '/');
 });
 
-// Handle browser back/forward
-window.addEventListener('popstate', (e) => {
-    if (e.state && e.state.page === 'discordbot') {
-        mainPage.classList.remove('active');
-        discordPage.classList.add('active');
+window.addEventListener('popstate', e => {
+    if (e.state?.page === 'discordbot') {
+        showDiscord();
     } else {
-        discordPage.classList.remove('active');
-        mainPage.classList.add('active');
+        showHome();
     }
 });
 
-// Check initial URL
-if (window.location.pathname.includes('discordbot')) {
-    mainPage.classList.remove('active');
-    discordPage.classList.add('active');
+if (location.pathname === '/discordbot') {
+    showDiscord();
+} else {
+    showHome();
 }
 
-// Discord Chat Functionality
-const chatMessages = document.getElementById('chatMessages');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
 
-// IMPORTANT: Replace this with your actual Discord webhook URL
-const WEBHOOK_URL = CONFIG.DISCORD_WEBHOOK_URL;
+// =====================
+// Discord bot logic (ISOLATED)
+// =====================
+let discordInitialized = false;
 
-// Poll for new messages every 2 seconds
-let lastMessageId = null;
+function initDiscordBot() {
+    if (discordInitialized) return;
+    discordInitialized = true;
 
-async function sendMessage() {
-    const message = messageInput.value.trim();
-    if (!message) return;
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const WEBHOOK_URL = CONFIG.DISCORD_WEBHOOK_URL;
 
-    const username = localStorage.getItem('discordUsername') || promptForUsername();
-    
-    try {
-        // Send to Discord webhook
-        await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content: message,
-                username: username
-            })
+    function getUsername() {
+        let name = localStorage.getItem('discordUsername');
+        if (!name) {
+            name = prompt('Enter your display name:') || 'Anonymous';
+            localStorage.setItem('discordUsername', name);
+        }
+        return name;
+    }
+
+    function addMessage(author, text) {
+        const div = document.createElement('div');
+        const time = new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
         });
 
+        div.className = 'chat-message sent';
+        div.innerHTML = `
+            <div class="chat-message-author">${author}</div>
+            <div class="chat-message-text">${text}</div>
+            <div class="chat-message-time">${time}</div>
+        `;
+
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text) return;
+
+        const username = getUsername();
+
+        await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: text,
+                username
+            })
+        }).catch(console.error);
+
         messageInput.value = '';
-        
-        // Add message to UI immediately
-        addMessageToUI(username, message, true);
-        
-    } catch (error) {
-        console.error('Error sending message:', error);
-        alert('Failed to send message. Check your webhook URL.');
+        addMessage(username, text);
     }
-}
 
-function promptForUsername() {
-    const username = prompt('Enter your display name:') || 'Anonymous';
-    localStorage.setItem('discordUsername', username);
-    return username;
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
 }
-
-function addMessageToUI(author, text, isSent = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `chat-message ${isSent ? 'sent' : ''}`;
-    
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    
-    messageDiv.innerHTML = `
-        <div class="chat-message-author">${author}</div>
-        <div class="chat-message-text">${text}</div>
-        <div class="chat-message-time">${timeStr}</div>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-sendBtn.addEventListener('click', sendMessage);
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
-});
