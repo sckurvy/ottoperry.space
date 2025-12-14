@@ -102,7 +102,6 @@ function showHome() {
 function showDiscord() {
     mainPage.classList.remove('active');
     discordPage.classList.add('active');
-    // Ensure DOM is visible before initializing
     setTimeout(() => initDiscordBot(), 0);
 }
 
@@ -119,18 +118,12 @@ backBtn.addEventListener('click', () => {
 });
 
 window.addEventListener('popstate', e => {
-    if (e.state?.page === 'discordbot') {
-        showDiscord();
-    } else {
-        showHome();
-    }
+    if (e.state?.page === 'discordbot') showDiscord();
+    else showHome();
 });
 
-if (location.pathname === '/discordbot') {
-    showDiscord();
-} else {
-    showHome();
-}
+if (location.pathname === '/discordbot') showDiscord();
+else showHome();
 
 
 // =====================
@@ -142,7 +135,6 @@ function initDiscordBot() {
     if (discordInitialized) return;
     discordInitialized = true;
 
-    // Ensure elements exist (after page activation)
     const chatMessages = document.getElementById('chatMessages');
     const messageInput = document.getElementById('messageInput');
     const sendBtn = document.getElementById('sendBtn');
@@ -150,24 +142,19 @@ function initDiscordBot() {
 
     if (!chatMessages || !messageInput || !sendBtn) return;
 
-function getUsername() {
-    return localStorage.getItem('discordUsername') || 'Anonymous';
-}
+    // ===== ADDED: username input (no prompt, live change)
+    function getUsername() {
+        return localStorage.getItem('discordUsername') || 'Anonymous';
+    }
 
-    const nameBtn = document.querySelector('.name-btn');
-if (nameBtn) {
-    nameBtn.addEventListener('click', () => {
-        const newName = prompt(
-            'Enter new display name:',
-            localStorage.getItem('discordUsername') || ''
-        );
-        if (newName) {
-            localStorage.setItem('discordUsername', newName);
-        }
-    });
-}
-
-
+    const usernameInput = document.getElementById('usernameSetting');
+    if (usernameInput) {
+        usernameInput.value = getUsername();
+        usernameInput.addEventListener('input', () => {
+            localStorage.setItem('discordUsername', usernameInput.value || 'Anonymous');
+        });
+    }
+    // ===== END ADD
 
     function addMessage(author, text) {
         const div = document.createElement('div');
@@ -196,10 +183,7 @@ if (nameBtn) {
         await fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: text,
-                username
-            })
+            body: JSON.stringify({ content: text, username })
         }).catch(console.error);
 
         messageInput.value = '';
