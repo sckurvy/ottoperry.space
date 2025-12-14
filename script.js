@@ -154,6 +154,20 @@ function getUsername() {
     return localStorage.getItem('discordUsername') || 'Anonymous';
 }
 
+    const nameBtn = document.querySelector('.name-btn');
+if (nameBtn) {
+    nameBtn.addEventListener('click', () => {
+        const newName = prompt(
+            'Enter new display name:',
+            localStorage.getItem('discordUsername') || ''
+        );
+        if (newName) {
+            localStorage.setItem('discordUsername', newName);
+        }
+    });
+}
+
+
 
     function addMessage(author, text) {
         const div = document.createElement('div');
