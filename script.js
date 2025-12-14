@@ -232,3 +232,35 @@ if (usernameSetting) {
     });
 }
 
+// =====================
+// Settings modal logic
+// =====================
+const openSettingsBtn = document.getElementById('openSettings');
+const closeSettingsBtn = document.getElementById('closeSettings');
+const settingsModal = document.getElementById('settingsModal');
+const usernameSetting = document.getElementById('usernameSetting');
+
+if (openSettingsBtn && settingsModal) {
+    openSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+    });
+}
+
+if (closeSettingsBtn && settingsModal) {
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+    });
+}
+
+// Username persistence
+if (usernameSetting) {
+    usernameSetting.value =
+        localStorage.getItem('discordUsername') || '';
+
+    usernameSetting.addEventListener('input', () => {
+        localStorage.setItem(
+            'discordUsername',
+            usernameSetting.value.trim() || 'Anonymous'
+        );
+    });
+}
