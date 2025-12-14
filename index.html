@@ -23,53 +23,65 @@
         <img src="assets/3dnamespin.gif" alt="Logo" class="logo">
     </div>
 
-    <!-- Main Page Content -->
+    <!-- =====================
+         MAIN PAGE
+         ===================== -->
     <div id="mainPage" class="page-content active">
-        <!-- Floating Boxes Grid -->
         <div class="boxes-container">
-            <div class="boxes-grid">
-                <div class="float-box">
-                    <h3>Feature One</h3>
-                    <p>This is some placeholder text for the first floating box. Add your content here.</p>
+
+            <!-- REQUIRED wrapper to keep both rows centered -->
+            <div class="home-sections">
+
+                <!-- Info Boxes -->
+                <div class="boxes-grid">
+                    <div class="float-box">
+                        <h3>Feature One</h3>
+                        <p>This is some placeholder text for the first floating box.</p>
+                    </div>
+                    <div class="float-box">
+                        <h3>Feature Two</h3>
+                        <p>This is some placeholder text for the second floating box.</p>
+                    </div>
+                    <div class="float-box">
+                        <h3>Feature Three</h3>
+                        <p>This is some placeholder text for the third floating box.</p>
+                    </div>
                 </div>
-                <div class="float-box">
-                    <h3>Feature Two</h3>
-                    <p>This is some placeholder text for the second floating box. Add your content here.</p>
+
+                <!-- Divider -->
+                <h2 class="pages-title">Pages</h2>
+
+                <!-- Page / App Boxes (MUST be in a grid) -->
+                <div class="boxes-grid">
+                    <div class="float-box page-box" data-page="discordbot">
+                        <h3>Discord Bot</h3>
+                        <p>Send messages through a Discord bot interface.</p>
+                    </div>
                 </div>
-                <div class="float-box">
-                    <h3>Feature Three</h3>
-                    <p>This is some placeholder text for the third floating box. Add your content here.</p>
-                </div>
-                <!-- Add more boxes here as needed -->
+
             </div>
         </div>
-
-        <!-- Pages Section -->
-  <!-- Divider -->
-        <h2 class="pages-title">Pages</h2>
-
-        <!-- Page / App Boxes -->
-<div class="float-box page-box" data-page="discordbot">
-    <h3>Discord Bot</h3>
-    <p>Send messages through a Discord bot interface.</p>
-</div>
-
-
-<div id="discordPage" class="page-content">
-    <button class="back-btn">← Back</button>
-
-    <div class="discord-container">
-        <h1>Discord Bot</h1>
-
-        <div id="chatMessages"></div>
-
-        <input id="messageInput" />
-        <button id="sendBtn">Send</button>
     </div>
-</div>
 
+    <!-- =====================
+         DISCORD PAGE
+         ===================== -->
+    <div id="discordPage" class="page-content">
+        <button class="back-btn">← Back</button>
 
-    
+        <div class="discord-container">
+            <h1>Discord Bot</h1>
+
+            <div id="chatMessages"></div>
+
+            <!-- REQUIRED: inputs must be inside discordPage -->
+            <div class="chat-input-container">
+                <input id="messageInput" placeholder="Type a message..." />
+                <button id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
