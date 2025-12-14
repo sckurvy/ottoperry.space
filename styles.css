@@ -173,6 +173,26 @@ body.dark-mode .float-box {
     line-height: 1.6;
 }
 
+.home-sections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    pointer-events: auto;
+}
+
+.pages-title {
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+body.dark-mode .pages-title {
+    color: #fff;
+}
+
+
 @keyframes float {
     0%, 100% {
         transform: translateY(0px);
