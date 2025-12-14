@@ -265,6 +265,74 @@ body.dark-mode .chat-message {
     gap: 8px;
 }
 
+/* =====================
+   Settings Modal
+   ===================== */
+.settings-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid #000;
+    background: transparent;
+    cursor: pointer;
+}
+
+body.dark-mode .settings-btn {
+    color: #fff;
+    border-color: #fff;
+}
+
+.settings-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.settings-modal.active {
+    display: flex;
+}
+
+.settings-window {
+    background: rgba(255,255,255,0.95);
+    padding: 24px;
+    border-radius: 12px;
+    width: 300px;
+    position: relative;
+}
+
+body.dark-mode .settings-window {
+    background: rgba(20,20,20,0.95);
+    color: #fff;
+}
+
+.close-settings {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: inherit;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.setting-row input {
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px;
+}
+
+
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
