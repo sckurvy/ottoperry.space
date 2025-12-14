@@ -200,6 +200,15 @@ body.dark-mode .pages-title {
     max-width: 1152px;
 }
 
+.page-content {
+    display: none;
+}
+
+.page-content.active {
+    display: block;
+}
+
+
 
 
 @keyframes float {
