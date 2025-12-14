@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otto Perry Website</title>
-<link rel="icon" href="https://ibb.co/vx6YcSVj" type="image/gif" >
+    <title>Otto Perry's Website</title>
+    <link rel="icon" href="https://ibb.co/vx6YcSVj" type="image/gif">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -23,25 +23,57 @@
         <img src="assets/3dnamespin.gif" alt="Logo" class="logo">
     </div>
 
-    <!-- Floating Boxes Grid -->
-    <div class="boxes-container">
-        <div class="boxes-grid">
-            <div class="float-box">
-                <h3>Feature One</h3>
-                <p>This is some placeholder text for the first floating box. Add your content here.</p>
+    <!-- Main Page Content -->
+    <div id="mainPage" class="page-content active">
+        <!-- Floating Boxes Grid -->
+        <div class="boxes-container">
+            <div class="boxes-grid">
+                <div class="float-box">
+                    <h3>Feature One</h3>
+                    <p>This is some placeholder text for the first floating box. Add your content here.</p>
+                </div>
+                <div class="float-box">
+                    <h3>Feature Two</h3>
+                    <p>This is some placeholder text for the second floating box. Add your content here.</p>
+                </div>
+                <div class="float-box">
+                    <h3>Feature Three</h3>
+                    <p>This is some placeholder text for the third floating box. Add your content here.</p>
+                </div>
+                <!-- Add more boxes here as needed -->
             </div>
-            <div class="float-box">
-                <h3>Feature Two</h3>
-                <p>This is some placeholder text for the second floating box. Add your content here.</p>
+        </div>
+
+        <!-- Pages Section -->
+        <div class="pages-section">
+            <h2 class="pages-title">Pages</h2>
+            <div class="pages-grid">
+                <div class="page-card">
+                    <h3>Discord Bot</h3>
+                    <p>Chat  in real-time through our Discord integration.</p>
+                    <button class="page-btn" data-page="discordbot">Visit Page</button>
+                </div>
+                <!-- Add more page cards here -->
             </div>
-            <div class="float-box">
-                <h3>Feature Three</h3>
-                <p>This is some placeholder text for the third floating box. Add your content here.</p>
-            </div>
-            <!-- Add more boxes here as needed -->
         </div>
     </div>
 
+    <!-- Discord Bot Page -->
+    <div id="discordPage" class="page-content">
+        <button class="back-btn">← Back to Home</button>
+        <div class="discord-container">
+            <h1 class="discord-title">Discord Bot Chat</h1>
+            <div class="chat-container">
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="messageInput" class="chat-input" placeholder="Type a message...">
+                    <button id="sendBtn" class="send-btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
