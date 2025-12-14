@@ -83,6 +83,22 @@ body.dark-mode .toggle-slider {
     transform: translateX(28px);
 }
 
+.name-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #000;
+    cursor: pointer;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .name-btn {
+    border-color: #fff;
+    color: #fff;
+}
+
+
 /* Logo */
 .logo-container {
     position: absolute;
