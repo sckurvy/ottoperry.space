@@ -90,3 +90,113 @@ document.addEventListener('mousemove', (e) => {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 animate();
+
+// Page Navigation
+const pageButtons = document.querySelectorAll('.page-btn');
+const backBtn = document.querySelector('.back-btn');
+const mainPage = document.getElementById('mainPage');
+const discordPage = document.getElementById('discordPage');
+
+pageButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const page = btn.getAttribute('data-page');
+        if (page === 'discordbot') {
+            mainPage.classList.remove('active');
+            discordPage.classList.add('active');
+            window.history.pushState({page: 'discordbot'}, '', '/discordbot');
+        }
+    });
+});
+
+backBtn.addEventListener('click', () => {
+    discordPage.classList.remove('active');
+    mainPage.classList.add('active');
+    window.history.pushState({page: 'home'}, '', '/');
+});
+
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.page === 'discordbot') {
+        mainPage.classList.remove('active');
+        discordPage.classList.add('active');
+    } else {
+        discordPage.classList.remove('active');
+        mainPage.classList.add('active');
+    }
+});
+
+// Check initial URL
+if (window.location.pathname.includes('discordbot')) {
+    mainPage.classList.remove('active');
+    discordPage.classList.add('active');
+}
+
+// Discord Chat Functionality
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1449796892862185603/SoR5A5MhvCIhVBXH6g7R2RjgsDJDhApScsCUIf6gh0tXQPpK1xLEKv8LczlLCwOXlWiW';
+
+// Poll for new messages every 2 seconds
+let lastMessageId = null;
+
+async function sendMessage() {
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    const username = localStorage.getItem('discordUsername') || promptForUsername();
+    
+    try {
+        // Send to Discord webhook
+        await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: message,
+                username: username
+            })
+        });
+
+        messageInput.value = '';
+        
+        // Add message to UI immediately
+        addMessageToUI(username, message, true);
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Check your webhook URL.');
+    }
+}
+
+function promptForUsername() {
+    const username = prompt('Enter your display name:') || 'Anonymous';
+    localStorage.setItem('discordUsername', username);
+    return username;
+}
+
+function addMessageToUI(author, text, isSent = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isSent ? 'sent' : ''}`;
+    
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    messageDiv.innerHTML = `
+        <div class="chat-message-author">${author}</div>
+        <div class="chat-message-text">${text}</div>
+        <div class="chat-message-time">${timeStr}</div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
