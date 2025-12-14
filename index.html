@@ -10,27 +10,37 @@
 <body>
     <canvas id="particleCanvas"></canvas>
 
-    <!-- Settings -->
-    <div class="settings">
-        <span class="mode-label">Light</span>
-        <button class="toggle-btn">
-            <div class="toggle-slider"></div>
-        </button>
+   <!-- Settings Button -->
+<div class="settings">
+    <button id="openSettings" class="settings-btn">⚙ Settings</button>
+</div>
 
-        <!-- Settings Gear -->
-        <button id="openSettings" class="settings-gear">⚙</button>
-    </div>
+<!-- Settings Modal -->
+<div id="settingsModal" class="settings-modal">
+    <div class="settings-window">
+        <button id="closeSettings" class="close-settings">✕</button>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="settings-modal">
-        <div class="settings-window">
-            <button id="closeSettings" class="settings-close">✕</button>
-            <h3>Settings</h3>
+        <h2>Settings</h2>
 
+        <!-- Theme Toggle -->
+        <div class="setting-row">
+            <span class="mode-label">Light</span>
+            <button class="toggle-btn">
+                <div class="toggle-slider"></div>
+            </button>
+        </div>
+
+        <!-- Username -->
+        <div class="setting-row">
             <label for="usernameSetting">Display Name</label>
-            <input id="usernameSetting" placeholder="Enter display name" />
+            <input
+                id="usernameSetting"
+                type="text"
+                placeholder="Enter name"
+            />
         </div>
     </div>
+</div>
 
     <!-- Logo -->
     <div class="logo-container">
