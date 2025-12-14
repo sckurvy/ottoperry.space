@@ -102,7 +102,8 @@ function showHome() {
 function showDiscord() {
     mainPage.classList.remove('active');
     discordPage.classList.add('active');
-    initDiscordBot();
+    // Ensure DOM is visible before initializing
+    setTimeout(() => initDiscordBot(), 0);
 }
 
 pageButtons.forEach(btn => {
@@ -141,10 +142,13 @@ function initDiscordBot() {
     if (discordInitialized) return;
     discordInitialized = true;
 
+    // Ensure elements exist (after page activation)
     const chatMessages = document.getElementById('chatMessages');
     const messageInput = document.getElementById('messageInput');
     const sendBtn = document.getElementById('sendBtn');
     const WEBHOOK_URL = CONFIG.DISCORD_WEBHOOK_URL;
+
+    if (!chatMessages || !messageInput || !sendBtn) return;
 
     function getUsername() {
         let name = localStorage.getItem('discordUsername');
