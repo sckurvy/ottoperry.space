@@ -150,14 +150,10 @@ function initDiscordBot() {
 
     if (!chatMessages || !messageInput || !sendBtn) return;
 
-    function getUsername() {
-        let name = localStorage.getItem('discordUsername');
-        if (!name) {
-            name = prompt('Enter your display name:') || 'Anonymous';
-            localStorage.setItem('discordUsername', name);
-        }
-        return name;
-    }
+function getUsername() {
+    return localStorage.getItem('discordUsername') || 'Anonymous';
+}
+
 
     function addMessage(author, text) {
         const div = document.createElement('div');
