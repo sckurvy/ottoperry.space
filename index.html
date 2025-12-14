@@ -17,8 +17,19 @@
             <div class="toggle-slider"></div>
         </button>
 
-        <button class="name-btn">Name</button>
+        <!-- Settings Gear -->
+        <button id="openSettings" class="settings-gear">⚙</button>
+    </div>
 
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-window">
+            <button id="closeSettings" class="settings-close">✕</button>
+            <h3>Settings</h3>
+
+            <label for="usernameSetting">Display Name</label>
+            <input id="usernameSetting" placeholder="Enter display name" />
+        </div>
     </div>
 
     <!-- Logo -->
@@ -32,10 +43,8 @@
     <div id="mainPage" class="page-content active">
         <div class="boxes-container">
 
-            <!-- REQUIRED wrapper to keep both rows centered -->
             <div class="home-sections">
 
-                <!-- Info Boxes -->
                 <div class="boxes-grid">
                     <div class="float-box">
                         <h3>Feature One</h3>
@@ -51,10 +60,8 @@
                     </div>
                 </div>
 
-                <!-- Divider -->
                 <h2 class="pages-title">Pages</h2>
 
-                <!-- Page / App Boxes (MUST be in a grid) -->
                 <div class="boxes-grid">
                     <div class="float-box page-box" data-page="discordbot">
                         <h3>Discord Bot</h3>
@@ -77,7 +84,6 @@
 
             <div id="chatMessages"></div>
 
-            <!-- REQUIRED: inputs must be inside discordPage -->
             <div class="chat-input-container">
                 <input id="messageInput" placeholder="Type a message..." />
                 <button id="sendBtn">Send</button>
