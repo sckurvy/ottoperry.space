@@ -195,3 +195,40 @@ function initDiscordBot() {
         if (e.key === 'Enter') sendMessage();
     });
 }
+// =====================
+// Settings modal + username handling (ADDED FIX)
+// =====================
+const openSettingsBtn = document.getElementById('openSettings');
+const closeSettingsBtn = document.getElementById('closeSettings');
+const settingsModal = document.getElementById('settingsModal');
+const usernameSetting = document.getElementById('usernameSetting');
+
+// Open / close modal
+if (openSettingsBtn && settingsModal) {
+    openSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+    });
+}
+
+if (closeSettingsBtn && settingsModal) {
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+    });
+}
+
+// Load + save username
+if (usernameSetting) {
+    // load saved name
+    usernameSetting.value =
+        localStorage.getItem('discordUsername') || '';
+
+    // save on change
+    usernameSetting.addEventListener('input', () => {
+        const value = usernameSetting.value.trim();
+        localStorage.setItem(
+            'discordUsername',
+            value || 'Anonymous'
+        );
+    });
+}
+
