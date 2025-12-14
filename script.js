@@ -136,7 +136,8 @@ const chatMessages = document.getElementById('chatMessages');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1449796892862185603/SoR5A5MhvCIhVBXH6g7R2RjgsDJDhApScsCUIf6gh0tXQPpK1xLEKv8LczlLCwOXlWiW';
+// IMPORTANT: Replace this with your actual Discord webhook URL
+const WEBHOOK_URL = CONFIG.DISCORD_WEBHOOK_URL;
 
 // Poll for new messages every 2 seconds
 let lastMessageId = null;
